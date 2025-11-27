@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabores Paceños: Bilingual Guide</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- PALETA DE COLORES VIBRANTE --- */
+        :root {
+            --color-rojo: #E63946;
+            --color-naranja: #F4A261;
+            --color-verde: #2A9D8F;
+            --color-azul: #457B9D;
+            --color-crema: #F8F4E3;
+            --color-texto: #2C2C2C;
+            --color-gris: #E0E0E0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 20px 0;
+            background-color: var(--color-crema);
+            color: var(--color-texto);
+            line-height: 1.6;
+            /* Por defecto mostramos español, ocultamos inglés */
+        }
+
+        body.lang-es .en { display: none !important; }
+        body.lang-en .es { display: none !important; }
+
+        /* HEADER Y CONTROL DE IDIOMAS */
+        .header-top {
+            display: flex;
+            justify-content: flex-end;
+            padding: 0 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .lang-btn {
+            background: none;
+            border: 2px solid var(--color-azul);
+            color: var(--color-azul);
+            padding: 5px 10px;
+            margin-left: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .lang-btn:hover, .lang-btn.active {
+            background-color: var(--color-azul);
+            color: white;
+        }
+
+        .titulo-principal {
+            font-family: 'Playfair Display', serif;
+            color: var(--color-rojo);
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+        }
+
+        .subtitulo-principal {
+            text-align: center;
+            color: var(--color-azul);
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        /* CONTENEDOR TIPO LIBRO */
+        .book-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            border: 1px solid var(--color-gris);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* NAVEGACIÓN SUPERIOR (PESTAÑAS) */
+        .book-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            background-color: var(--color-azul);
+            padding: 10px 5px;
+            border-bottom: 5px solid var(--color-naranja);
+        }
+        
+        .book-nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            margin: 3px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .book-nav a:hover {
+            background-color: var(--color-naranja);
+            transform: translateY(-2px);
+        }
+        
+        .book-nav a.active {
+            background-color: var(--color-rojo);
+            border-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* CONTENIDO DE LAS PÁGINAS */
+        .page {
+            display: none;
+            padding: 40px;
+            animation: fadeIn 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        #content1 { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem;
+            color: var(--color-rojo);
+            border-bottom: 3px solid var(--color-verde);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .page h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--color-azul);
+            margin-top: 25px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .page h3::before {
+            content: '•';
+            color: var(--color-naranja);
+            margin-right: 10px;
+            font-size: 2rem;
+            line-height: 0;
+        }
+
+        .texto-contenido {
+            font-size: 1.05rem;
+            text-align: justify;
+            margin-bottom: 15px;
+            color: #444;
+        }
+
+        /* CAJA DE GUÍA PRÁCTICA */
+        .lugar-recomendado {
+            background-color: #FFF3CD;
+            border-left: 5px solid var(--color-naranja);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 5px 5px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .lugar-recomendado h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--color-azul);
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .lugar-recomendado h3::before { content: none; }
+        
+        .guia-practica-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0;
+        }
+        .guia-practica-list li {
+            font-size: 1.05rem;
+            margin-bottom: 8px;
+            color: var(--color-texto);
+            font-weight: 700;
+        }
+        .guia-practica-list li span {
+            font-weight: 400;
+            color: #333;
+        }
+
+        /* PLACEHOLDERS */
+        .img-placeholder {
+            width: 100%;
+            height: 300px;
+            background-color: var(--color-gris);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-weight: bold;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .img-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .map-placeholder {
+            height: 250px;
+            margin-top: 20px;
+            width: 100%;
+            background-color: var(--color-gris);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-weight: bold;
+        }
+
+        /* PORTADA */
+        .cover-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .cover-btn {
+            background-color: var(--color-verde);
+            color: white;
+            padding: 20px 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .cover-btn:hover {
+            background-color: var(--color-naranja);
+            transform: scale(1.05);
+        }
+        .cover-btn.extra { background-color: var(--color-azul); }
+
+        /* GLOSARIO */
+        .glosario-item {
+            margin-bottom: 15px;
+            border-bottom: 1px dashed var(--color-gris);
+            padding-bottom: 10px;
+        }
+        .glosario-term {
+            font-weight: bold;
+            color: var(--color-rojo);
+            font-size: 1.1rem;
+        }
+
+        /* NAVEGACIÓN INFERIOR */
+        .nav-bottom {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--color-gris);
+        }
+        .btn-nav {
+            background-color: var(--color-texto);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .btn-nav:hover { background-color: var(--color-naranja); }
+        .btn-nav.prev { visibility: hidden; }
+
+        @media (max-width: 768px) {
+            .titulo-principal { font-size: 2rem; }
+            .page { padding: 20px; }
+            .page h2 { font-size: 1.8rem; }
+            .book-nav a { font-size: 0.8rem; padding: 5px 8px; }
+            .img-placeholder { height: 200px; }
+        }
+    </style>
+</head>
+<body class="lang-es"> <div class="header-top">
+        <button class="lang-btn active" id="btn-es" onclick="setLanguage('es')">🇪🇸 ES</button>
+        <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">🇺🇸 EN</button>
+    </div>
+
+    <h1 class="titulo-principal">
+        <span class="es">Street Food Tour</span>
+        <span class="en">Street Food Tour</span>
+    </h1>
+    <div class="subtitulo-principal">
+        <span class="es">Un viaje por la comida callejera de La Paz</span>
+        <span class="en">A journey through La Paz street food</span>
+    </div>
+
+    <div class="book-container">
+        
+        <nav class="book-nav" id="main-nav">
+            <a onclick="showPage(1)"><span class="es">Portada</span><span class="en">Cover</span></a>
+            <a onclick="showPage(2)">Salteña</a>
+            <a onclick="showPage(3)">Tucumana</a>
+            <a onclick="showPage(4)">Llaucha</a>
+            <a onclick="showPage(5)">Api</a>
+            <a onclick="showPage(6)">Relleno</a>
+            <a onclick="showPage(7)">Choripán</a>
+            <a onclick="showPage(8)">Anticucho</a>
+            <a onclick="showPage(9)"><span class="es">S. Chola</span><span class="en">Chola S.</span></a>
+            <a onclick="showPage(10)"><span class="es">Glosario</span><span class="en">Glossary</span></a>
+        </nav>
+
+        <div id="content1" class="page">
+            <div style="text-align: center;">
+                <h2>
+                    <span class="es">Guía de Comida Callejera</span>
+                    <span class="en">Street Food Guide</span>
+                </h2>
+                <p class="texto-contenido" style="text-align: center;">
+                    <span class="es">Bienvenido a un recorrido visual y gastronómico por las calles de La Paz. Descubre la historia, los secretos y los mejores lugares para disfrutar de nuestros platos emblemáticos.</span>
+                    <span class="en">Welcome to a visual and gastronomic tour through the streets of La Paz. Discover the history, secrets, and best places to enjoy our iconic dishes.</span>
+                </p>
+            </div>
+            
+            <div class="cover-grid">
+                <div class="cover-btn" onclick="showPage(2)">Salteña</div>
+                <div class="cover-btn" onclick="showPage(3)">Tucumana</div>
+                <div class="cover-btn" onclick="showPage(4)">Llaucha</div>
+                <div class="cover-btn" onclick="showPage(5)">Api & Pastel</div>
+                <div class="cover-btn" onclick="showPage(6)">
+                    <span class="es">Relleno de Papa</span>
+                    <span class="en">Relleno de papa</span>
+                </div>
+                <div class="cover-btn" onclick="showPage(7)">Choripán</div>
+                <div class="cover-btn" onclick="showPage(8)">Anticucho</div>
+                <div class="cover-btn" onclick="showPage(9)">
+                    <span class="es">Sándwich de Chola</span>
+                    <span class="en">Chola Sandwich</span>
+                </div>
+                <div class="cover-btn extra" onclick="showPage(10)">
+                    <span class="es">Guía y Glosario</span>
+                    <span class="en">Guide & Glossary</span>
+                </div>
+            </div>
+
+            <div class="nav-bottom">
+                <button class="btn-nav prev" onclick="prevPage()">
+                    <span class="es">Anterior</span><span class="en">Previous</span>
+                </button>
+                <button class="btn-nav next" onclick="nextPage()">
+                    <span class="es">Empezar Recorrido ➜</span><span class="en">Start Tour ➜</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="content2" class="page">
+            <h2>La Salteña</h2>
+            <div class="img-placeholder">
+                <img src="salteña.jpg" alt="Salteña boliviana" style="width:100%; border-radius: 8px;">
+            </div>
+            
+            <h3>
+                <span class="es">Historia y Origen</span>
+                <span class="en">History & Origin</span>
+            </h3>
+            <p class="texto-contenido">
+                <span class="es">La salteña llegó a Bolivia en el siglo XIX gracias a <strong>Juana Manuela Gorriti</strong>, una escritora argentina refugiada en Tarija. Ella enseñó esta receta a las familias tarijeñas, quienes la adaptaron con más jugo y especias. Con el tiempo, se extendió al altiplano y a La Paz, convirtiéndose en el desayuno paceño por excelencia.</span>
+                <span class="en">The salteña arrived in Bolivia in the 19th century thanks to <strong>Juana Manuela Gorriti</strong>, an Argentine writer exiled in Tarija. She taught this recipe to local families, who adapted it with more juice and spices. Over time, it spread to the highlands and La Paz, becoming the quintessential *paceño* breakfast.</span>
+            </p>
+
+            <div class="lugar-recomendado">
+                <h3>
+                    <span class="es">Guía Práctica: Dónde Comerla</span>
+                    <span class="en">Practical Guide: Where to Eat</span>
+                </h3>
+                <ul class="guia-practica-list">
+                    <li>
+                        <span class="es">Lugar:</span><span class="en">Place:</span> 
+                        <span>Paceña La Salteña (Recommended)</span>
+                    </li>
+                    <li>
+                        <span class="es">Dirección:</span><span class="en">Address:</span> 
+                        <span>Calle Socabaya (Centro / Downtown)</span>
+                    </li>
+                    <li>
+                        <span class="es">Horarios:</span><span class="en">Hours:</span> 
+                        <span>9:00 AM - 1:00 PM</span>
+                    </li>
+                    <li>
+                        <span class="es">Precios:</span><span class="en">Price:</span> 
+                        <span>6 – 10 Bs</span>
+                    </li>
+                    <li>
+                        <span class="es">Recomendación:</span><span class="en">Tip:</span> 
+                        <span><span class="es">Otras zonas: Calle Mercaderes, Sopocachi.</span><span class="en">Other areas: Mercaderes St, Sopocachi.</span></span>
+                    </li>
+                </ul>
+                <div class="map-placeholder">
+                    <iframe width="100%" height="250" border-radius="8px" loading="lazy" style="border:0" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB2NIWI3Tv9iDPrlnowr_0ZqZWoAQydKJU&q=Pace%C3%B1a%20La%20Salte%C3%B1a%2C%20Loayza%2C%20La%20Paz%2C%20Bolivia&maptype=roadmap" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="nav-bottom">
+                <button class="btn-nav prev" onclick="prevPage()">⬅ <span class="es">Anterior</span><span class="en">Prev</span></button>
+                <button class="btn-nav next" onclick="nextPage()"><span class="es">Siguiente</span><span class="en">Next</span> ➡</button>
+            </div>
+        </div>
+
+        <div id="content3" class="page">
+            <h2>La Tucumana</h2>
+            <div class="img-placeholder">
+                <img src="tucumanas.jpg" alt="Tucumana" style="width:100%; border-radius: 8px;">
+            </div>
+            
+            <h3>
+                <span class="es">Historia y Origen</span>
+                <span class="en">History & Origin</span>
+            </h3>
+            <p class="texto-contenido">
+                <span class="es">La tucumana es la "hermana" frita de la salteña. Su origen se relaciona con inmigrantes del norte argentino (Tucumán). En La Paz, se adaptó con una masa más crocante y rellenos más simples, consumida sobre todo al mediodía o tarde.</span>
+                <span class="en">The tucumana is the fried "sister" of the salteña. Its origin is linked to immigrants from northern Argentina (Tucumán). In La Paz, it was adapted with a crispier dough and simpler fillings, typically eaten at mid-morning or as a lunch snack.</span>
+            </p>
+
+            <div class="lugar-recomendado">
+                <h3>
+                    <span class="es">Guía Práctica: Dónde Comerla</span>
+                    <span class="en">Practical Guide: Where to Eat</span>
+                </h3>
+                <ul class="guia-practica-list">
+                    <li><span class="es">Lugar:</span><span class="en">Place:</span> <span>Tucumanas del Prado</span></li>
+                    <li><span class="es">Dirección:</span><span class="en">Address:</span> <span>El Prado (Main Boulevard)</span></li>
+                    <li><span class="es">Precios:</span><span class="en">Price:</span> <span>5 – 8 Bs</span></li>
+                </ul>
+                <div class="map-placeholder">
+                     <iframe width="100%" height="250" border-radius="8px" loading="lazy" style="border:0" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB2NIWI3Tv9iDPrlnowr_0ZqZWoAQydKJU&q=Tucumanas%20Del%20Prado%2C%20La%20Paz%2C%20Bolivia&maptype=roadmap" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="nav-bottom">
+                <button class="btn-nav prev" onclick="prevPage()">⬅ <span class="es">Anterior</span><span class="en">Prev</span></button>
+                <button class="btn-nav next" onclick="nextPage()"><span class="es">Siguiente</span><span class="en">Next</span> ➡</button>
+            </div>
+        </div>
+
+        <div id="content4" class="page">
+            <h2>La Llaucha</h2>
+            <div class="img-placeholder">
+                <img src="Llaucha.jpg" alt="Llaucha" style="width:100%; border-radius: 8px;">
+            </div>
+            
+            <h3>
+                <span class="es">Historia y Origen</span>
+                <span class="en">History & Origin</span>
+            </h3>
+            <p class="texto-contenido">
+                <span class="es">Pan horneado relleno de queso, originario del altiplano paceño. Su nombre proviene del aimara <em>llawcha</em> (“cosa suave o tierna”). Era un alimento tradicional para los trabajadores del campo.</span>
+                <span class="en">Baked bread filled with cheese, originating from the La Paz highlands. Its name comes from the Aymara word <em>llawcha</em> ("soft thing"). It was a traditional energy food for field workers.</span>
+            </p>
+
+            <div class="lugar-recomendado">
+                <h3>
+                    <span class="es">Guía Práctica: Dónde Comerla</span>
+                    <span class="en">Practical Guide: Where to Eat</span>
+                </h3>
+                <ul class="guia-practica-list">
+                    <li><span class="es">Lugar:</span><span class="en">Place:</span> <span>Feria de la Calle Rodríguez</span></li>
+                    <li><span class="es">Dirección:</span><span class="en">Address:</span> <span>Calle Rodríguez (Market zone)</span></li>
+                    <li><span class="es">Precios:</span><span class="en">Price:</span> <span>3 – 6 Bs</span></li>
+                </ul>
+                <div class="map-placeholder">
+                    <iframe width="100%" height="250" border-radius="8px" loading="lazy" style="border:0" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB2NIWI3Tv9iDPrlnowr_0ZqZWoAQydKJU&q=Mercado%20Rodr%C3%ADguez%2C%20Rodriguez%2C%20La%20Paz%2C%20Bolivia&maptype=roadmap" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="nav-bottom">
+                <button class="btn-nav prev" onclick="prevPage()">⬅ <span class="es">Anterior</span><span class="en">Prev</span></button>
+                <button class="btn-nav next" onclick="nextPage()"><span class="es">Siguiente</span><span class="en">Next</span> ➡</button>
+            </div>
+        </div>
+
+        <div id="content5" class="page">
+            <h2>Api con Pastel</h2>
+            <div class="img-placeholder">
+                <img src="api.jpg" alt="Api con pastel" style="width:100%; border-radius: 8px;">
+            </div>
+            
+            <h3>
+                <span class="es">Historia y Origen</span>
+                <span class="en">History & Origin</span>
+            </h3>
+            <p class="texto-contenido">
+                <span class="es">El api morado tiene origen precolombino, hecho de maíz morado andino. El pastel (masa frita con queso) es una adaptación colonial. Este combo es ideal para el frío.</span>
+                <span class="en">Purple api has pre-Columbian origins, made from Andean purple corn. The *pastel* (fried dough with cheese) is a colonial adaptation. This combo is the perfect warmer for the cold weather.</span>
+            </p>
+
+            <div class="lugar-recomendado">
+                <h3>
+                    <span class="es">Guía Práctica: Dónde Comerla</span>
+                    <span class="en">Practical Guide: Where to Eat</span>
+                </h3>
+                <ul class="guia-practica-list">
+                    <li><span class="es">Lugar:</span><span class="en">Place:</span> <span>Mercado Lanza</span></li>
+                    <li><span class="es">Horarios:</span><span class="en">Hours:</span> <span>6AM - 10AM / 5PM - 9PM</span></li>
+                    <li><span class="es">Precios:</span><span class="en">Price:</span> <span>8 – 12 Bs</span></li>
+                </ul>
+                <div class="map-placeholder">
+                    <iframe width="100%" height="250" border-radius="8px" loading="lazy" style="border:0" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB2NIWI3Tv9iDPrlnowr_0ZqZWoAQydKJU&q=Mercado%20Lanza%2C%20San%20Francisco%2C%20Avenida%20P%C3%A9rez%20Velasco%2C%20La%20Paz%2C%20Bolivia&maptype=roadmap" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="nav-bottom">
+                <button class="btn-nav prev" onclick="prevPage()">⬅ <span class="es">Anterior</span><span class="en">Prev</span></button>
+                <button class="btn-nav next" onclick="nextPage()"><span class="es">Siguiente</span><span class="en">Next</span> ➡</button>
+            </div>
+        </div>
+
+        <div id="content6" class="page">
+            <h2>
+                <span class="es">Relleno de Papa</span>
+                <span class="en">Relleno de papa</span>
+            </h2>
+            <div class="img-placeholder">
+                <img src="Rellenos.jpg" alt="Relleno de papa" style="width:100%; border-radius: 8px;">
+            </div>
+            
+            <h3>
+                <span class="es">Historia y Origen</span>
+                <span class="en">History & Origin</span>
+            </h3>
+            <p class="texto-contenido">
+                <span class="es">Originalmente era una forma de aprovechar las papas cocidas sobrantes. En La Paz se volvió muy popular como merienda de tarde y en ferias barriales.</span>
+                <span class="en">Originally a way to use up leftover boiled potatoes. In La Paz, it became very popular as an afternoon snack and in neighborhood street fairs.</span>
+            </p>
+
+            <div class="lugar-recomendado">
+                <h3>
+                    <span class="es">Guía Práctica: Dónde Comerla</span>
+                    <span class="en">Practical Guide: Where to Eat</span>
+                </h3>
+                <ul class="guia-practica-list">
+                    <li><span class="es">Lugar:</span><span class="en">Place:</span> <span>Rellenos de Doña Emi</span></li>
+                    <li><span class="es">Dirección:</span><span class="en">Address:</span> <span>Plaza San Francisco (Opposite side)</span></li>
+                    <li><span class="es">Precios:</span><span class="en">Price:</span> <span>5 – 8 Bs</span></li>
+                </ul>
+                <div class="map-placeholder">
+                    <iframe width="100%" height="250" border-radius="8px" loading="lazy" style="border:0" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB2NIWI3Tv9iDPrlnowr_0ZqZWoAQydKJU&q=Rellenos%20de%20Do%C3%B1a%20Emi%2C%20Avenida%20Mariscal%20Santa%20Cruz%2C%20La%20Paz%2C%20Bolivia&maptype=roadmap" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="nav-bottom">
+                <button class="btn-nav prev" onclick="prevPage()">⬅ <span class="es">Anterior</span><span class="en">Prev</span></button>
+                <button class="btn-nav next" onclick="nextPage()"><span class="es">Siguiente</span><span class="en">Next</span> ➡</button>
+            </div>
+        </div>
+
+        <div id="content7" class="page">
+            <h2>Choripán</h2>
+            <div class="img-placeholder">
+                <img src="choripan.jpg" alt="Choripan" style="width:100%; border-radius: 8px;">
+            </div>
+            
+            <h3>
+                <span class="es">Historia y Origen</span>
+                <span class="en">History & Origin</span>
+            </h3>
+            <p class="texto-contenido">
+                <span class="es">Introducido por inmigrantes y adaptado por los paceños con llajua y la icónica marraqueta. Hoy es un clásico de ferias nocturnas.</span>
+                <span class="en">Introduced by immigrants and adapted by locals with *llajua* (spicy sauce) and the iconic *marraqueta* bread. Today it is a classic at night fairs.</span>
+            </p>
+
+            <div class="lugar-recomendado">
+                <h3>
+                    <span class="es">Guía Práctica: Dónde Comerla</span>
+                    <span class="en">Practical Guide: Where to Eat</span>
+                </h3>
+                <ul class="guia-practica-list">
+                    <li><span class="es">Lugar:</span><span class="en">Place:</span> <span>Mercado Lanza (Choripanes)</span></li>
+                    <li><span class="es">Dirección:</span><span class="en">Address:</span> <span>Mercado Lanza (Afternoon)</span></li>
+                    <li><span class="es">Precios:</span><span class="en">Price:</span> <span>10 – 18 Bs</span></li>
+                </ul>
+                <div class="map-placeholder">
+                    <iframe width="100%" height="250" border-radius="8px" loading="lazy" style="border:0" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB2NIWI3Tv9iDPrlnowr_0ZqZWoAQydKJU&q=Mercado%20Lanza%2C%20San%20Francisco%2C%20Avenida%20P%C3%A9rez%20Velasco%2C%20La%20Paz%2C%20Bolivia&maptype=roadmap" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="nav-bottom">
+                <button class="btn-nav prev" onclick="prevPage()">⬅ <span class="es">Anterior</span><span class="en">Prev</span></button>
+                <button class="btn-nav next" onclick="nextPage()"><span class="es">Siguiente</span><span class="en">Next</span> ➡</button>
+            </div>
+        </div>
+
+        <div id="content8" class="page">
+            <h2>Anticucho</h2>
+            <div class="img-placeholder">
+                <img src="anticucho.jpg" alt="Anticucho" style="width:100%; border-radius: 8px;">
+            </div>
+            
+            <h3>
+                <span class="es">Historia y Origen</span>
+                <span class="en">History & Origin</span>
+            </h3>
+            <p class="texto-contenido">
+                <span class="es">Brochetas de corazón de res a la parrilla. En La Paz se volvió un símbolo de la comida nocturna, acompañado con papa, maní y llajua.</span>
+                <span class="en">Grilled beef heart skewers. In La Paz, it became a symbol of nightlife food, served with potato, peanut sauce, and spicy *llajua*.</span>
+            </p>
+
+            <div class="lugar-recomendado">
+                <h3>
+                    <span class="es">Guía Práctica: Dónde Comerla</span>
+                    <span class="en">Practical Guide: Where to Eat</span>
+                </h3>
+                <ul class="guia-practica-list">
+                    <li><span class="es">Lugar:</span><span class="en">Place:</span> <span>Las Chicas (La 20 de Octubre)</span></li>
+                    <li><span class="es">Dirección:</span><span class="en">Address:</span> <span>20 de Octubre & Aspiazu St.</span></li>
+                    <li><span class="es">Horarios:</span><span class="en">Hours:</span> <span>7:00 PM - 11:00 PM</span></li>
+                </ul>
+                <div class="map-placeholder">
+                    <iframe width="100%" height="250" border-radius="8px" loading="lazy" style="border:0" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB2NIWI3Tv9iDPrlnowr_0ZqZWoAQydKJU&q=El%20Velero%20Ardiente%20Anticuchos%2C%20Av.20%20de%20Octubre%2C%20La%20Paz%2C%20Bolivia&maptype=roadmap" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="nav-bottom">
+                <button class="btn-nav prev" onclick="prevPage()">⬅ <span class="es">Anterior</span><span class="en">Prev</span></button>
+                <button class="btn-nav next" onclick="nextPage()"><span class="es">Siguiente</span><span class="en">Next</span> ➡</button>
+            </div>
+        </div>
+
+        <div id="content9" class="page">
+            <h2>
+                <span class="es">Sándwich de Chola</span>
+                <span class="en">Chola Sandwich</span>
+            </h2>
+            <div class="img-placeholder">
+                <img src="Schola.jpg" alt="Sandwich de Chola" style="width:100%; border-radius: 8px;">
+            </div>
+            
+            <h3>
+                <span class="es">Historia y Origen</span>
+                <span class="en">History & Origin</span>
+            </h3>
+            <p class="texto-contenido">
+                <span class="es">Creado por "cholas" (mujeres de pollera). Consiste en cerdo horneado, escabeche y pan especial. Es uno de los platos más representativos de La Paz.</span>
+                <span class="en">Created by "cholas" (indigenous women in traditional dress). It consists of roast pork, pickled vegetables, and special bread. It is one of the most representative dishes of La Paz.</span>
+            </p>
+
+            <div class="lugar-recomendado">
+                <h3>
+                    <span class="es">Guía Práctica: Dónde Comerla</span>
+                    <span class="en">Practical Guide: Where to Eat</span>
+                </h3>
+                <ul class="guia-practica-list">
+                    <li><span class="es">Lugar:</span><span class="en">Place:</span> <span>La Sultana / Parque de las Cholas</span></li>
+                    <li><span class="es">Dirección:</span><span class="en">Address:</span> <span>Mercado Antofagasta</span></li>
+                    <li><span class="es">Precios:</span><span class="en">Price:</span> <span>15 – 25 Bs</span></li>
+                </ul>
+                <div class="map-placeholder">
+                    <iframe width="100%" height="250" border-radius="8px" loading="lazy" style="border:0" style="border:0" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyB2NIWI3Tv9iDPrlnowr_0ZqZWoAQydKJU&q=Mercado%20Antofagasta%2C%20Avenue%20Armentia%2C%20La%20Paz%2C%20Bolivia&maptype=roadmap" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="nav-bottom">
+                <button class="btn-nav prev" onclick="prevPage()">⬅ <span class="es">Anterior</span><span class="en">Prev</span></button>
+                <button class="btn-nav next" onclick="nextPage()"><span class="es">Siguiente</span><span class="en">Next</span> ➡</button>
+            </div>
+        </div>
+
+        <div id="content10" class="page">
+            <h2>
+                <span class="es">Guía y Glosario Paceño</span>
+                <span class="en">Guide & Paceño Glossary</span>
+            </h2>
+            
+            <h3>
+                <span class="es">📖 Glosario Gastronómico</span>
+                <span class="en">📖 Gastronomic Glossary</span>
+            </h3>
+            
+            <div class="glosario-item">
+                <div class="glosario-term">Llajua</div>
+                <div>
+                    <span class="es">Salsa picante elaborada con locoto, tomate y quirquiña.</span>
+                    <span class="en">Spicy salsa made with locoto pepper, tomato, and quirquiña (Andean cilantro).</span>
+                </div>
+            </div>
+            <div class="glosario-item">
+                <div class="glosario-term">Paceñito</div>
+                <div>
+                    <span class="es">Frito pequeño, muy común por las mañanas.</span>
+                    <span class="en">A small fried treat, very common in the mornings.</span>
+                </div>
+            </div>
+            <div class="glosario-item">
+                <div class="glosario-term">Ahogado</div>
+                <div>
+                    <span class="es">Salsa caliente de cebolla y tomate.</span>
+                    <span class="en">Hot sauce made of onion and tomato, used as a base.</span>
+                </div>
+            </div>
+            <div class="glosario-item">
+                <div class="glosario-term">Marraqueta</div>
+                <div>
+                    <span class="es">Pan crocante tradicional paceño.</span>
+                    <span class="en">Traditional crispy bread from La Paz (the baguette of the Andes).</span>
+                </div>
+            </div>
+            <div class="glosario-item">
+                <div class="glosario-term">Caserita</div>
+                <div>
+                    <span class="es">Forma cariñosa de llamar a la vendedora.</span>
+                    <span class="en">Affectionate way to address the vendor ("My little seller").</span>
+                </div>
+            </div>
+            <div class="glosario-item">
+                <div class="glosario-term">Yapa</div>
+                <div>
+                    <span class="es">Un extra de cortesía que te da la vendedora.</span>
+                    <span class="en">A free extra portion given as a courtesy.</span>
+                </div>
+            </div>
+
+            <div class="lugar-recomendado">
+                <h3>
+                    <span class="es">🛡️ Recomendaciones Prácticas</span>
+                    <span class="en">🛡️ Practical Tips</span>
+                </h3>
+                <ul class="guia-practica-list" style="list-style-type: '🛡️ '; padding-left: 25px;">
+                    <li style="padding-left: 5px;">
+                        <span class="es">Lleva efectivo (monedas y billetes de corte bajo).</span>
+                        <span class="en">Bring cash (coins and small bills).</span>
+                    </li>
+                    <li style="padding-left: 5px;">
+                        <span class="es">Pregunta siempre por la "yapa".</span>
+                        <span class="en">Always ask for the "yapa" (the extra bit).</span>
+                    </li>
+                    <li style="padding-left: 5px;">
+                        <span class="es">Si no comes picante, pide "sin llajua".</span>
+                        <span class="en">If you don't eat spicy food, say "sin llajua".</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="nav-bottom">
+                <button class="btn-nav prev" onclick="prevPage()">⬅ <span class="es">Anterior</span><span class="en">Prev</span></button>
+                <button class="btn-nav next" style="visibility: hidden;">Fin</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentPage = 1;
+        const totalPages = 10;
+        let currentLang = 'es'; // Idioma por defecto
+
+        // Función para cambiar idioma
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.body.className = 'lang-' + lang;
+            
+            // Actualizar botones activos
+            document.getElementById('btn-es').classList.remove('active');
+            document.getElementById('btn-en').classList.remove('active');
+            document.getElementById('btn-' + lang).classList.add('active');
+        }
+
+        function showPage(pageNumber) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(p => p.style.display = 'none');
+
+            document.getElementById('content' + pageNumber).style.display = 'block';
+            currentPage = pageNumber;
+
+            const navLinks = document.querySelectorAll('.book-nav a');
+            navLinks.forEach(link => link.classList.remove('active'));
+            if(navLinks[pageNumber - 1]) {
+                navLinks[pageNumber - 1].classList.add('active');
+            }
+
+            controlButtons();
+            document.querySelector('.book-container').scrollTop = 0;
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages) {
+                showPage(currentPage + 1);
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                showPage(currentPage - 1);
+            }
+        }
+
+        function controlButtons() {
+            const currentDiv = document.getElementById('content' + currentPage);
+            const btnPrev = currentDiv.querySelector('.prev');
+            const btnNext = currentDiv.querySelector('.next');
+
+            if (btnPrev) btnPrev.style.visibility = (currentPage === 1) ? 'hidden' : 'visible';
+            if (btnNext) btnNext.style.visibility = (currentPage === totalPages) ? 'hidden' : 'visible';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showPage(1);
+            setLanguage('es'); // Iniciar en español
+        });
+    </script>
+
+</body>
+</html>
